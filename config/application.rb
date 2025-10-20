@@ -23,5 +23,17 @@ module StarterBaseInertia
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Allow YAML deserialization of specific classes for Audited gem compatibility
+    # Required for Ruby 3.3+ / Psych 5+ due to stricter safe_load defaults
+    config.active_record.yaml_column_permitted_classes = [
+      Symbol,
+      Time,
+      Date,
+      BigDecimal,
+      ActiveSupport::HashWithIndifferentAccess,
+      ActiveSupport::TimeWithZone,
+      ActiveSupport::TimeZone
+    ]
   end
 end

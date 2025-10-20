@@ -1,8 +1,10 @@
 class Admin::AuditLogsController < Admin::BaseController
+  after_action :verify_authorized
   after_action :verify_policy_scoped, only: :index
 
   # GET /admin/audit_logs
   def index
+    authorize Audited::Audit
     audits = policy_scope(Audited::Audit).where(auditable_type: "User").includes(:user)
 
     # Search by user name or email

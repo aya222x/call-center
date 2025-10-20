@@ -1,10 +1,12 @@
 class Admin::UsersController < Admin::BaseController
   before_action :set_user, only: [ :show, :edit, :update, :destroy ]
 
-  after_action :verify_authorized, except: :index
+  after_action :verify_authorized
   after_action :verify_policy_scoped, only: :index
 
   def index
+    authorize User
+
     # Build search query with Ransack
     search_params = params[:q] || {}
 
