@@ -52,15 +52,19 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def create
-    @user = User.new(user_params)
-    authorize @user
+    authorize User
 
-    if @user.save
-      redirect_to admin_users_path, notice: "User was successfully created."
+    outcome = Invitations::SendInvitation.run(
+      current_user: current_user,
+      email: params[:user][:email],
+      name: params[:user][:name]
+    )
+
+    if outcome.valid?
+      redirect_to admin_users_path, notice: "Invitation sent successfully to #{outcome.result.email}"
     else
       render inertia: "Admin/Users/New", props: {
-        errors: @user.errors.messages,
-        user: @user.attributes
+        errors: outcome.errors.messages
       }
     end
   end
@@ -74,13 +78,33 @@ class Admin::UsersController < Admin::BaseController
 
   def update
     authorize @user
-    if @user.update(user_params)
+
+    # Only allow updating name and owner status, not password
+    update_params = params.require(:user).permit(:name, :owner)
+
+    if @user.update(update_params)
       redirect_to admin_users_path, notice: "User was successfully updated."
     else
       render inertia: "Admin/Users/Edit", props: {
         errors: @user.errors.messages,
         user: user_props(@user)
       }
+    end
+  end
+
+  def resend_invitation
+    @user = User.find(params[:id])
+    authorize @user
+
+    outcome = Invitations::ResendInvitation.run(
+      current_user: current_user,
+      user_id: @user.id
+    )
+
+    if outcome.valid?
+      redirect_to admin_users_path, notice: "Invitation resent successfully to #{outcome.result.email}"
+    else
+      redirect_to admin_users_path, alert: outcome.errors.full_messages.join(", ")
     end
   end
 
@@ -114,7 +138,10 @@ class Admin::UsersController < Admin::BaseController
       name: user.name,
       email: user.email,
       owner: user.owner,
-      created_at: user.created_at.iso8601
+      created_at: user.created_at.iso8601,
+      invitation_pending: user.invitation_pending?,
+      invitation_accepted: user.invitation_accepted?,
+      active: user.active?
     }
   end
 end

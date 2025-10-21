@@ -32,19 +32,12 @@ interface AdminUserNewProps {
   errors?: {
     name?: string[]
     email?: string[]
-    password?: string[]
-    password_confirmation?: string[]
   }
 }
 
 const userSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must not exceed 100 characters'),
   email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  password_confirmation: z.string().min(8, 'Password confirmation must be at least 8 characters'),
-}).refine((data) => data.password === data.password_confirmation, {
-  message: "Passwords don't match",
-  path: ['password_confirmation'],
 })
 
 type UserFormData = z.infer<typeof userSchema>
@@ -75,7 +68,7 @@ export default function AdminUserNew({ auth, errors }: AdminUserNewProps) {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Create User</BreadcrumbPage>
+                  <BreadcrumbPage>Invite User</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -88,8 +81,8 @@ export default function AdminUserNew({ auth, errors }: AdminUserNewProps) {
               <div className="px-4 lg:px-6">
                 <Card className="from-primary/5 to-card bg-gradient-to-t shadow-xs max-w-2xl">
                   <CardHeader>
-                    <CardTitle>Create New User</CardTitle>
-                    <CardDescription>Add a new user to the system</CardDescription>
+                    <CardTitle>Invite New User</CardTitle>
+                    <CardDescription>Send an invitation email to a new user. They will set their own password.</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -123,36 +116,6 @@ export default function AdminUserNew({ auth, errors }: AdminUserNewProps) {
                         )}
                       </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                          id="password"
-                          type="password"
-                          {...register('password')}
-                        />
-                        {formErrors.password && (
-                          <p className="text-sm text-destructive">{formErrors.password.message}</p>
-                        )}
-                        {errors?.password && (
-                          <p className="text-sm text-destructive">{errors.password[0]}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="password_confirmation">Confirm Password</Label>
-                        <Input
-                          id="password_confirmation"
-                          type="password"
-                          {...register('password_confirmation')}
-                        />
-                        {formErrors.password_confirmation && (
-                          <p className="text-sm text-destructive">{formErrors.password_confirmation.message}</p>
-                        )}
-                        {errors?.password_confirmation && (
-                          <p className="text-sm text-destructive">{errors.password_confirmation[0]}</p>
-                        )}
-                      </div>
-
                       <div className="flex justify-end gap-2 pt-4">
                         <Button
                           type="button"
@@ -162,7 +125,7 @@ export default function AdminUserNew({ auth, errors }: AdminUserNewProps) {
                           Cancel
                         </Button>
                         <Button type="submit" disabled={isSubmitting}>
-                          {isSubmitting ? 'Creating...' : 'Create User'}
+                          {isSubmitting ? 'Sending Invitation...' : 'Send Invitation'}
                         </Button>
                       </div>
                     </form>

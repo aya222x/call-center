@@ -33,35 +33,11 @@ interface AdminUserEditProps {
   user: User
   errors?: {
     name?: string[]
-    email?: string[]
-    password?: string[]
-    password_confirmation?: string[]
   }
 }
 
 const userEditSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must not exceed 100 characters'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().optional(),
-  password_confirmation: z.string().optional(),
-}).refine((data) => {
-  // If password is provided, it must be at least 8 characters
-  if (data.password && data.password.length > 0 && data.password.length < 8) {
-    return false
-  }
-  return true
-}, {
-  message: "Password must be at least 8 characters",
-  path: ['password'],
-}).refine((data) => {
-  // If password is provided, confirmation must match
-  if (data.password && data.password.length > 0) {
-    return data.password === data.password_confirmation
-  }
-  return true
-}, {
-  message: "Passwords don't match",
-  path: ['password_confirmation'],
 })
 
 type UserEditFormData = z.infer<typeof userEditSchema>
@@ -71,20 +47,11 @@ export default function AdminUserEdit({ auth, user, errors }: AdminUserEditProps
     resolver: zodResolver(userEditSchema),
     defaultValues: {
       name: user.name,
-      email: user.email,
-      password: '',
-      password_confirmation: '',
     },
   })
 
   const onSubmit = (data: UserEditFormData) => {
-    // Remove empty password fields
-    const submitData = { ...data }
-    if (!submitData.password || submitData.password.length === 0) {
-      delete submitData.password
-      delete submitData.password_confirmation
-    }
-    router.put(`/admin/users/${user.id}`, { user: submitData })
+    router.put(`/admin/users/${user.id}`, { user: data })
   }
 
   return (
@@ -142,44 +109,11 @@ export default function AdminUserEdit({ auth, user, errors }: AdminUserEditProps
                         <Input
                           id="email"
                           type="email"
-                          {...register('email')}
+                          value={user.email}
+                          disabled
+                          className="bg-muted"
                         />
-                        {formErrors.email && (
-                          <p className="text-sm text-destructive">{formErrors.email.message}</p>
-                        )}
-                        {errors?.email && (
-                          <p className="text-sm text-destructive">{errors.email[0]}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="password">Password (leave blank to keep current)</Label>
-                        <Input
-                          id="password"
-                          type="password"
-                          {...register('password')}
-                        />
-                        {formErrors.password && (
-                          <p className="text-sm text-destructive">{formErrors.password.message}</p>
-                        )}
-                        {errors?.password && (
-                          <p className="text-sm text-destructive">{errors.password[0]}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="password_confirmation">Confirm Password</Label>
-                        <Input
-                          id="password_confirmation"
-                          type="password"
-                          {...register('password_confirmation')}
-                        />
-                        {formErrors.password_confirmation && (
-                          <p className="text-sm text-destructive">{formErrors.password_confirmation.message}</p>
-                        )}
-                        {errors?.password_confirmation && (
-                          <p className="text-sm text-destructive">{errors.password_confirmation[0]}</p>
-                        )}
+                        <p className="text-xs text-muted-foreground">Email cannot be changed</p>
                       </div>
 
                       <div className="flex justify-end gap-2 pt-4">

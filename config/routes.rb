@@ -23,12 +23,20 @@ Rails.application.routes.draw do
     put :reset, to: "reset#update"
   end
 
+  # Invitation routes (public)
+  get "/invitations/:token", to: "invitations#show", as: :accept_invitation
+  post "/invitations/:token/accept", to: "invitations#accept"
+
   # Profile routes (authenticated users)
   resource :profile, only: [ :show, :edit, :update ]
 
   # Admin routes (super_admin only)
   namespace :admin do
-    resources :users
+    resources :users do
+      member do
+        post :resend_invitation
+      end
+    end
     resources :audit_logs, only: [ :index ]
     get :console, to: "console#index"
   end

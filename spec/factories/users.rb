@@ -28,5 +28,19 @@ FactoryBot.define do
     trait :owner do
       owner { true }
     end
+
+    trait :invited do
+      password { nil }
+      password_confirmation { nil }
+      invitation_token { SecureRandom.urlsafe_base64 }
+      invitation_sent_at { Time.current }
+      invitation_accepted_at { nil }
+    end
+
+    trait :invitation_accepted do
+      invitation_token { nil }
+      invitation_sent_at { 1.day.ago }
+      invitation_accepted_at { Time.current }
+    end
   end
 end

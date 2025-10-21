@@ -75,7 +75,7 @@ RSpec.describe "Admin::Users", type: :request do
       it "redirects to users index" do
         post admin_users_path, params: valid_attributes, headers: auth_headers(owner_user)
         expect(response).to redirect_to(admin_users_path)
-        expect(flash[:notice]).to eq("User was successfully created.")
+        expect(flash[:notice]).to match(/Invitation sent successfully to/)
       end
     end
 

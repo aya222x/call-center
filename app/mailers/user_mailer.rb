@@ -8,4 +8,14 @@ class UserMailer < ApplicationMailer
       subject: "Password Reset Instructions"
     )
   end
+
+  def invitation_email(user, token)
+    @user = user
+    @invitation_url = accept_invitation_url(token: token)
+
+    mail(
+      to: user.email,
+      subject: "You've been invited to join Starter App"
+    )
+  end
 end
