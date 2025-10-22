@@ -60,3 +60,5 @@ node_modules
 # Claude AI assistant files
 .mcp.json
 
+
+/config/credentials/production.key
