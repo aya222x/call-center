@@ -13,8 +13,13 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   testDir: './e2e',
 
-  // Maximum time one test can run
-  timeout: 60 * 1000,
+  // Maximum time one test can run (15s)
+  timeout: 15 * 1000,
+
+  // Fail fast - don't wait forever for missing elements
+  expect: {
+    timeout: 5 * 1000,  // Assertions fail after 5s (not 30s)
+  },
 
   // Run tests serially for stability (parallel can cause flakiness with shared DB)
   fullyParallel: false,
@@ -36,6 +41,12 @@ export default defineConfig({
   use: {
     // Base URL - can be overridden with BASE_URL env var for testing deployed apps
     baseURL: process.env.BASE_URL || 'http://localhost:3002',
+
+    // Fail fast on interactions (clicks, fills) - most should be instant
+    actionTimeout: 5 * 1000,
+
+    // Navigation needs more time (page loads, redirects)
+    navigationTimeout: 10 * 1000,
 
     // Collect trace when retrying the failed test
     trace: 'on-first-retry',

@@ -126,6 +126,8 @@ test.describe('Smoke Tests: Critical User Flows', () => {
 
       // Should redirect back to users list with success message
       await expect(adminPage).toHaveURL('/admin/users', { timeout: 10000 })
+
+      // Pattern: Verify Sonner toast notification with regex for flexibility
       await expect(adminPage.locator('text=/invitation sent/i')).toBeVisible({ timeout: 5000 })
 
       // New user should appear in the list (use .first() for strict mode)
@@ -141,6 +143,45 @@ test.describe('Smoke Tests: Critical User Flows', () => {
 
       // Should see email on the page (use .first() for strict mode)
       await expect(adminPage.locator('text=@example.com').first()).toBeVisible()
+    })
+
+    authTest('admin can delete a user', async ({ adminPage }) => {
+      // Create a user to delete
+      await adminPage.goto('/admin/users/new')
+      const timestamp = Date.now()
+      await adminPage.fill('#name', `User to Delete ${timestamp}`)
+      await adminPage.fill('#email', `delete${timestamp}@example.com`)
+      await adminPage.click('button[type="submit"]')
+
+      // Wait for redirect to users list
+      await expect(adminPage).toHaveURL('/admin/users', { timeout: 10000 })
+
+      // Wait for the new user to appear in the list
+      await expect(adminPage.locator(`text=delete${timestamp}@example.com`).first()).toBeVisible({ timeout: 5000 })
+
+      // Find the user row
+      const userRow = adminPage.locator(`tr:has-text("delete${timestamp}@example.com")`).first()
+
+      // Click delete button to open dialog (uses aria-label, not title)
+      await userRow.locator('button[aria-label="Delete user"]').click()
+
+      // Pattern: Wait for DeleteConfirmationDialog to appear
+      await adminPage.waitForSelector('[role="alertdialog"]', { timeout: 2000 })
+
+      // Verify dialog content
+      await expect(adminPage.locator('text=/are you sure/i')).toBeVisible()
+
+      // Click confirm button
+      await adminPage.click('button:has-text("Delete")')
+
+      // Wait for redirect back to users list
+      await expect(adminPage).toHaveURL('/admin/users', { timeout: 10000 })
+
+      // Verify success toast
+      await expect(adminPage.locator('text=/successfully deleted/i')).toBeVisible({ timeout: 5000 })
+
+      // User should not appear in the list anymore
+      await expect(adminPage.locator(`text=delete${timestamp}@example.com`)).not.toBeVisible()
     })
 
     authTest('regular user cannot access admin console', async ({ authenticatedPage }) => {
