@@ -188,7 +188,7 @@ This is a **production-ready** starter template built with Test-Driven Developme
 ## 📁 File Structure
 
 ```
-starter-base-inertia/
+starter-base/
 ├── app/
 │   ├── controllers/
 │   │   ├── concerns/

@@ -38,7 +38,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "127.0.0.1", port: 3001 }
+  config.action_mailer.default_url_options = { host: "127.0.0.1", port: 3000 }
 
   # Use letter_opener_web to preview emails in browser
   config.action_mailer.delivery_method = :letter_opener_web

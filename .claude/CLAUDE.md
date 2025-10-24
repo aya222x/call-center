@@ -140,7 +140,7 @@ npm test -- --run && bundle exec rspec    # Vitest + RSpec only
 ### E2E / Smoke Tests (Playwright)
 
 **CRITICAL - Port Separation:**
-- Dev server runs on port **3001** (development DB)
+- Dev server runs on port **3000** (development DB)
 - E2E tests run on port **3002** (test DB with RAILS_ENV=test)
 - This prevents e2e from interfering with dev DB
 - You can keep `bin/dev` running while running e2e tests
@@ -177,7 +177,7 @@ BASE_URL=https://your-domain.com npm run test:e2e  # Test deployed app
 ```
 
 **Summary - How It All Works:**
-1. Dev server: Port 3001 (development DB) - never touched by tests
+1. Dev server: Port 3000 (development DB) - never touched by tests
 2. E2E server: Port 3002 (test DB with RAILS_ENV=test) - isolated from dev
 3. `npm run test:all` flow:
    - Vitest runs (no DB)
