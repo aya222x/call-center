@@ -34,13 +34,14 @@ module Authenticatable
   end
 
   def render_unauthorized(message = "Unauthorized")
-    respond_to do |format|
-      format.json { render json: { error: message }, status: :unauthorized }
-      format.html do
-        # Store the original URL they were trying to access
-        return_to = request.fullpath unless request.fullpath == login_path
-        redirect_to login_path(return_to: return_to)
-      end
+    # Distinguish between initial page loads and Inertia XHR requests
+    if request.headers["X-Inertia"]
+      # Inertia XHR request: Return 401 JSON (frontend handles redirect)
+      render json: { error: message }, status: :unauthorized
+    else
+      # Initial page load: Redirect to login (JWT not in request yet, it's in localStorage)
+      return_to = request.fullpath unless request.fullpath == login_path
+      redirect_to login_path(return_to: return_to)
     end
   end
 end

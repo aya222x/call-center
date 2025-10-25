@@ -6,18 +6,32 @@ RSpec.describe "Admin::Console", type: :request, inertia: true do
 
   describe "GET /admin/console" do
     context "when not authenticated" do
-      it "redirects to login" do
+      it "redirects to login with return_to" do
         get admin_console_path
         expect(response).to have_http_status(:redirect)
         expect(response.location).to include(login_path)
+        expect(response.location).to include('return_to')
+      end
+
+      it "returns 401 for Inertia XHR requests" do
+        get admin_console_path, headers: { 'X-Inertia' => 'true', 'X-Inertia-Version' => InertiaRails.configuration.version }
+        expect(response).to have_http_status(:unauthorized)
+        json = JSON.parse(response.body)
+        expect(json["error"]).to eq("Unauthorized")
       end
     end
 
     context "when authenticated as regular user" do
-      it "redirects to root with unauthorized message" do
+      it "redirects to root" do
         get admin_console_path, headers: auth_headers(regular_user)
         expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+      end
+
+      it "returns 403 for Inertia XHR requests" do
+        get admin_console_path, headers: auth_headers(regular_user, inertia: true)
+        expect(response).to have_http_status(:forbidden)
+        json = JSON.parse(response.body)
+        expect(json["error"]).to eq("You are not authorized to perform this action.")
       end
     end
 

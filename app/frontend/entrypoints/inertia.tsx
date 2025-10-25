@@ -59,6 +59,45 @@ if (appElement) {
     }
   })
 
+  // Handle authentication and authorization errors
+  // Use 'invalid' event for non-Inertia responses (401, 403, etc.)
+  router.on('invalid', (event) => {
+    const response = event.detail.response
+
+    // 401 Unauthorized - JWT expired/invalid
+    if (response && response.status === 401) {
+      // Clear invalid tokens
+      localStorage.removeItem('auth_token')
+      localStorage.removeItem('refresh_token')
+
+      // Redirect to login page (preserving return_to URL)
+      const currentPath = window.location.pathname
+      const returnTo = currentPath !== '/login' ? currentPath : null
+
+      router.visit('/login' + (returnTo ? `?return_to=${encodeURIComponent(returnTo)}` : ''), {
+        replace: true, // Replace history entry instead of pushing
+      })
+
+      // Prevent default error handling
+      event.preventDefault()
+    }
+
+    // 403 Forbidden - Insufficient permissions
+    if (response && response.status === 403) {
+      // Redirect to dashboard with error message
+      router.visit('/', {
+        replace: true,
+        onFinish: () => {
+          // Error message will be shown by error handler in the component
+          console.error('Access forbidden: You do not have permission to access this resource')
+        }
+      })
+
+      // Prevent default error handling
+      event.preventDefault()
+    }
+  })
+
   // Add global loading indicator
   let loadingTimeout: NodeJS.Timeout | null = null
 
