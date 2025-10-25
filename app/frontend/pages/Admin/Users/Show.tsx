@@ -1,5 +1,5 @@
 import { router } from '@inertiajs/react'
-import { CrownIcon, MailIcon, UserRoundIcon, CalendarIcon } from 'lucide-react'
+import { CrownIcon, MailIcon, UserRoundIcon } from 'lucide-react'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -25,7 +25,7 @@ interface AdminUserShowProps {
   user: User
 }
 
-export default function AdminUserShow({ auth, user }: AdminUserShowProps) {
+export default function AdminUserShow({ user }: AdminUserShowProps) {
   const getRoleInfo = () => {
     if (user.admin) {
       return {

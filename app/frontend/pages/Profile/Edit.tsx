@@ -3,7 +3,7 @@ import { router } from '@inertiajs/react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { UploadIcon, UserIcon } from 'lucide-react'
+import { UploadIcon } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -55,7 +55,7 @@ const profileEditSchema = z.object({
 
 type ProfileEditFormData = z.infer<typeof profileEditSchema>
 
-export default function EditProfile({ auth, user }: EditProfileProps) {
+export default function EditProfile({ user }: EditProfileProps) {
   const { register, handleSubmit, formState: { errors: formErrors, isSubmitting } } = useForm<ProfileEditFormData>({
     resolver: zodResolver(profileEditSchema),
     defaultValues: {

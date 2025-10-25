@@ -33,7 +33,7 @@ const userSchema = z.object({
 
 type UserFormData = z.infer<typeof userSchema>
 
-export default function AdminUserNew({ auth, errors }: AdminUserNewProps) {
+export default function AdminUserNew({ errors }: AdminUserNewProps) {
   const { register, handleSubmit, formState: { errors: formErrors, isSubmitting } } = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
   })

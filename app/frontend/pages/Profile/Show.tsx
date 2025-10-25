@@ -21,7 +21,7 @@ interface ProfileShowProps {
   user: User
 }
 
-export default function ProfileShow({ auth, user }: ProfileShowProps) {
+export default function ProfileShow({ user }: ProfileShowProps) {
   const getUserInitials = (name: string): string => {
     const parts = name.trim().split(/\s+/)
     if (parts.length >= 2) {

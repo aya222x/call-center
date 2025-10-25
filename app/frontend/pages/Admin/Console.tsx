@@ -22,7 +22,7 @@ interface AdminConsoleProps {
   }
 }
 
-export default function AdminConsole({ auth, stats }: AdminConsoleProps) {
+export default function AdminConsole({ stats }: AdminConsoleProps) {
   return (
     <>
       <AppHeader

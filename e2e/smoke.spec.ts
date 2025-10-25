@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { test as authTest, login, logout } from './fixtures/auth'
+import { test as authTest, logout } from './fixtures/auth'
 
 /**
  * Smoke Tests

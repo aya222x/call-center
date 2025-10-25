@@ -76,7 +76,6 @@ interface AdminAuditLogsIndexProps {
 // Removed separate filter component - filters are now inline in the main component for consistency with Admin Users
 
 export default function AdminAuditLogsIndex({
-  auth,
   audits,
   pagination,
   filters,
