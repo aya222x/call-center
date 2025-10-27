@@ -8,8 +8,8 @@ module Auth
         # Revoke old token
         @refresh_token_record.revoke!
 
-        # Generate new JWT token
-        jwt_token = JwtService.encode(user_id: @refresh_token_record.user_id)
+        # Generate new JWT token with password_version
+        jwt_token = JwtService.encode_for_user(@refresh_token_record.user)
 
         # Generate new refresh token
         new_refresh_token = JwtService.generate_refresh_token(@refresh_token_record.user)

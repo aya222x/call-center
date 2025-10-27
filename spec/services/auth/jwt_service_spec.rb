@@ -44,6 +44,29 @@ RSpec.describe Auth::JwtService do
     end
   end
 
+  describe '.encode_for_user' do
+    it 'includes user_id and password_version in payload' do
+      token = described_class.encode_for_user(user)
+      decoded = JWT.decode(token, described_class::SECRET_KEY)[0]
+
+      expect(decoded['user_id']).to eq(user.id)
+      expect(decoded['password_version']).to eq(user.password_version)
+    end
+
+    it 'updates password_version when user password changes' do
+      initial_token = described_class.encode_for_user(user)
+      initial_decoded = JWT.decode(initial_token, described_class::SECRET_KEY)[0]
+      initial_version = initial_decoded['password_version']
+
+      user.update(password: 'newpassword123')
+
+      new_token = described_class.encode_for_user(user.reload)
+      new_decoded = JWT.decode(new_token, described_class::SECRET_KEY)[0]
+
+      expect(new_decoded['password_version']).to eq(initial_version + 1)
+    end
+  end
+
   describe '.generate_refresh_token' do
     it 'creates a RefreshToken record for the user' do
       expect {

@@ -23,6 +23,7 @@ interface LoginResponse {
 class AuthService {
   private token: string | null = null
   private refreshToken: string | null = null
+  private storageEventListener: ((event: StorageEvent) => void) | null = null
 
   constructor() {
     this.token = this.getToken()
@@ -32,6 +33,9 @@ class AuthService {
     if (this.isAuthenticated() && !this.isTokenExpired()) {
       this.startTokenRefresh()
     }
+
+    // Set up cross-tab sync via storage events
+    this.setupStorageEventListener()
   }
 
   /**
@@ -209,6 +213,87 @@ class AuthService {
       console.error('Logout request failed:', error)
     } finally {
       this.clearTokens()
+    }
+  }
+
+  /**
+   * Set up storage event listener for cross-tab synchronization
+   * When auth_token is removed in another tab (logout), this tab will be notified
+   */
+  private setupStorageEventListener(): void {
+    // Only set up listener in browser environment
+    if (typeof window === 'undefined') return
+
+    // Remove existing listener if any
+    if (this.storageEventListener) {
+      window.removeEventListener('storage', this.storageEventListener)
+    }
+
+    // Create new listener
+    this.storageEventListener = (event: StorageEvent) => {
+      // Only handle auth_token changes
+      if (event.key !== 'auth_token') return
+
+      // Token was removed in another tab (logout)
+      if (event.newValue === null && event.oldValue !== null) {
+        this.handleCrossTabLogout()
+      }
+
+      // Token was added/changed in another tab (login or refresh)
+      if (event.newValue !== null && event.newValue !== event.oldValue) {
+        this.handleCrossTabLogin(event.newValue)
+      }
+    }
+
+    // Attach listener
+    window.addEventListener('storage', this.storageEventListener)
+  }
+
+  /**
+   * Handle logout that occurred in another tab
+   */
+  private handleCrossTabLogout(): void {
+    console.log('Cross-tab logout detected')
+
+    // Clear local state
+    this.token = null
+    this.refreshToken = null
+    this.stopTokenRefresh()
+
+    // Dispatch custom event so application can respond (e.g., redirect to login)
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('auth:logout', { detail: { crossTab: true } }))
+    }
+  }
+
+  /**
+   * Handle login/token refresh that occurred in another tab
+   */
+  private handleCrossTabLogin(newToken: string): void {
+    console.log('Cross-tab login/refresh detected')
+
+    // Update local token
+    this.token = newToken
+    this.refreshToken = this.getRefreshToken()
+
+    // Restart token refresh with new token
+    if (!this.isTokenExpired()) {
+      this.startTokenRefresh()
+    }
+
+    // Dispatch custom event so application can respond (e.g., refresh page data)
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('auth:login', { detail: { crossTab: true } }))
+    }
+  }
+
+  /**
+   * Clean up event listener (useful for testing)
+   */
+  cleanup(): void {
+    if (this.storageEventListener && typeof window !== 'undefined') {
+      window.removeEventListener('storage', this.storageEventListener)
+      this.storageEventListener = null
     }
   }
 }

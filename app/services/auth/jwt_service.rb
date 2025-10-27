@@ -12,6 +12,17 @@ module Auth
         JWT.encode(payload, SECRET_KEY, "HS256")
       end
 
+      # Encode JWT token for a specific user (includes password_version)
+      # @param user [User] The user to generate token for
+      # @param exp [Time] Expiration time (default: 24 hours from now)
+      # @return [String] JWT token
+      def self.encode_for_user(user, exp = 24.hours.from_now)
+        encode({
+          user_id: user.id,
+          password_version: user.password_version
+        }, exp)
+      end
+
       # Decode JWT token
       # @param token [String] JWT token to decode
       # @return [Hash, nil] Decoded payload or nil if invalid/expired

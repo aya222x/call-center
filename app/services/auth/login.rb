@@ -6,8 +6,8 @@ module Auth
       validate :authenticate_user
 
       def execute
-        # Generate JWT token
-        jwt_token = JwtService.encode(user_id: user.id)
+        # Generate JWT token with password_version
+        jwt_token = JwtService.encode_for_user(user)
 
         # Generate refresh token
         refresh_token_data = JwtService.generate_refresh_token(user)

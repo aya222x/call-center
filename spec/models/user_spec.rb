@@ -116,6 +116,66 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe 'password_version' do
+    let(:user) { create(:user) }
+
+    describe 'default value' do
+      it 'starts at 1 for new users' do
+        new_user = create(:user)
+        expect(new_user.password_version).to eq(1)
+      end
+    end
+
+    describe 'incrementing on password change' do
+      it 'increments password_version when password is updated' do
+        initial_version = user.password_version
+        user.update(password: 'newpassword123')
+
+        expect(user.password_version).to eq(initial_version + 1)
+      end
+
+      it 'does not increment when other attributes are updated' do
+        initial_version = user.password_version
+        user.update(name: 'New Name')
+
+        expect(user.password_version).to eq(initial_version)
+      end
+
+      it 'increments version multiple times for multiple password changes' do
+        initial_version = user.password_version
+
+        user.update(password: 'password1')
+        expect(user.password_version).to eq(initial_version + 1)
+
+        user.update(password: 'password2')
+        expect(user.password_version).to eq(initial_version + 2)
+      end
+    end
+
+    describe 'revoking refresh tokens on password change' do
+      it 'revokes all active refresh tokens when password changes' do
+        token1 = create(:refresh_token, user: user)
+        token2 = create(:refresh_token, user: user)
+
+        expect(token1.reload.revoked_at).to be_nil
+        expect(token2.reload.revoked_at).to be_nil
+
+        user.update(password: 'newpassword123')
+
+        expect(token1.reload.revoked_at).to be_present
+        expect(token2.reload.revoked_at).to be_present
+      end
+
+      it 'does not revoke tokens when other attributes change' do
+        token = create(:refresh_token, user: user)
+
+        user.update(name: 'New Name')
+
+        expect(token.reload.revoked_at).to be_nil
+      end
+    end
+  end
+
   describe 'invitation methods' do
     let(:invited_user) { create(:user, :invited) }
 

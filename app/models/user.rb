@@ -45,6 +45,8 @@ class User < ApplicationRecord
 
   # Callbacks
   before_save :normalize_email
+  before_save :increment_password_version_if_changed
+  after_save :revoke_refresh_tokens_on_password_change
 
   # Ransack configuration - only allow searching on safe attributes
   def self.ransackable_attributes(auth_object = nil)
@@ -120,5 +122,20 @@ class User < ApplicationRecord
 
   def password_present?
     password.present?
+  end
+
+  def increment_password_version_if_changed
+    if password_digest_changed? && !new_record?
+      self.password_version ||= 1
+      self.password_version += 1
+    end
+  end
+
+  def revoke_refresh_tokens_on_password_change
+    if saved_change_to_password_digest? && !saved_change_to_invitation_accepted_at?
+      # Revoke all active refresh tokens when password changes
+      # (but not when accepting invitation, as that's the first password set)
+      refresh_tokens.active.each(&:revoke!)
+    end
   end
 end

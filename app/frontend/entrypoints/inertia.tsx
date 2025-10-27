@@ -98,6 +98,25 @@ if (appElement) {
     }
   })
 
+  // Handle cross-tab logout - redirect to login when logged out in another tab
+  window.addEventListener('auth:logout', (event: Event) => {
+    const customEvent = event as CustomEvent
+    if (customEvent.detail?.crossTab) {
+      console.log('Detected logout in another tab, redirecting to login')
+      router.visit('/login', { replace: true })
+    }
+  })
+
+  // Handle cross-tab login - optionally reload current page to get fresh data
+  window.addEventListener('auth:login', (event: Event) => {
+    const customEvent = event as CustomEvent
+    if (customEvent.detail?.crossTab) {
+      console.log('Detected login in another tab')
+      // Optionally reload the current page to get fresh data
+      // router.reload()
+    }
+  })
+
   // Add global loading indicator
   let loadingTimeout: NodeJS.Timeout | null = null
 

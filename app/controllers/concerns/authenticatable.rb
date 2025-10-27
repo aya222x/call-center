@@ -16,7 +16,15 @@ module Authenticatable
     decoded = Auth::JwtService.decode(token)
     return unless decoded
 
-    @current_user = User.find_by(id: decoded["user_id"])
+    user = User.find_by(id: decoded["user_id"])
+    return unless user
+
+    # Validate password_version matches (invalidates JWT if password changed)
+    if decoded["password_version"] && user.password_version != decoded["password_version"]
+      return
+    end
+
+    @current_user = user
   end
 
   def current_user
