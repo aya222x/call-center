@@ -30,6 +30,10 @@ threads threads_count, threads_count
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 port ENV.fetch("PORT", 3000)
 
+# Explicitly set the working directory to the Rails root
+# This prevents Puma from detecting incorrect paths from ENV['PWD']
+directory File.expand_path('..', __dir__)
+
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
 
