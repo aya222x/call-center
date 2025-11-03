@@ -10,7 +10,8 @@ Rails.application.configure do
     policy.frame_ancestors :self,
                           "http://localhost:3000",
                           "https://*.cayu.ai",
-                          "https://staging-cayu-ai.fly.dev"
+                          "https://*.fly.dev",      # Allow all Fly.io apps (staging, production, etc.)
+                          "https://*.cayu.dev"      # Allow dev instance domains
 
     #     policy.default_src :self, :https
     #     policy.font_src    :self, :https, :data
