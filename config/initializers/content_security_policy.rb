@@ -11,7 +11,8 @@ Rails.application.configure do
                           "http://localhost:3000",
                           "https://*.cayu.ai",
                           "https://*.fly.dev",      # Allow all Fly.io apps (staging, production, etc.)
-                          "https://*.cayu.dev"      # Allow dev instance domains
+                          "https://*.cayu.dev",     # Allow dev instance domains (DigitalOcean)
+                          "https://*.cayu.app"      # Allow dev instance domains (AWS EC2)
 
     #     policy.default_src :self, :https
     #     policy.font_src    :self, :https, :data
