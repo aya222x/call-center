@@ -11,7 +11,7 @@
 # Leave this empty - app name must be passed via --app flag
 
 app = ''
-primary_region = 'dfw'
+primary_region = 'iad'
 console_command = '/rails/bin/rails console'
 
 [build]
