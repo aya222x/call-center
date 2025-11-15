@@ -1,8 +1,6 @@
 <project_header>
 # Starter Base - Project Gotchas
 
-> **Project-specific antipatterns and reference files. Read global ~/.claude/CLAUDE.md first.**
-
 <stack_info>
 Rails 8.0.2.1 + Ruby 3.3.6 | Vite + Inertia + React + TS | Tailwind v4 | shadcn Premium | ActiveInteraction | Pundit | pagy | RSpec + Vitest + Playwright
 </stack_info>
@@ -28,6 +26,20 @@ Rails 8.0.2.1 + Ruby 3.3.6 | Vite + Inertia + React + TS | Tailwind v4 | shadcn 
 **📖 Full Details**: See antipattern sections below
 </critical_rules_summary>
 </project_header>
+
+---
+
+<level_3_requirements>
+**Level 3 Implementation Requirements (Production Ready):**
+
+When implementing at Level 3, this project requires:
+- **RSpec**: Model, service, policy, and request specs
+- **Vitest**: `.test.tsx` files for all pages and components
+- **Playwright**: E2E tests in `e2e/` directory for user workflows
+- **Health Check**: `npm run test:health` must pass before completion
+
+See `<critical_requirement type="testing">` section below for detailed testing patterns and commands.
+</level_3_requirements>
 
 ---
 
