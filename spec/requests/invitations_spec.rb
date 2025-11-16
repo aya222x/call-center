@@ -123,7 +123,7 @@ RSpec.describe "Invitations", type: :request, inertia: true do
       it "returns error when password is blank" do
         post "/invitations/#{token}/accept", params: { password: "", password_confirmation: "" }, as: :json
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         json = JSON.parse(response.body)
         expect(json["errors"]).to be_present
       end
@@ -131,7 +131,7 @@ RSpec.describe "Invitations", type: :request, inertia: true do
       it "returns error when password is too short" do
         post "/invitations/#{token}/accept", params: { password: "short", password_confirmation: "short" }, as: :json
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         json = JSON.parse(response.body)
         expect(json["errors"]).to be_present
       end
@@ -139,7 +139,7 @@ RSpec.describe "Invitations", type: :request, inertia: true do
       it "returns error when passwords don't match" do
         post "/invitations/#{token}/accept", params: { password: "password123", password_confirmation: "different123" }, as: :json
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         json = JSON.parse(response.body)
         expect(json["errors"]).to include("Password confirmation doesn't match password")
       end
@@ -147,7 +147,7 @@ RSpec.describe "Invitations", type: :request, inertia: true do
       it "returns error with invalid token" do
         post "/invitations/invalid-token/accept", params: valid_params, as: :json
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         json = JSON.parse(response.body)
         expect(json["errors"]).to be_present
       end
@@ -163,7 +163,7 @@ RSpec.describe "Invitations", type: :request, inertia: true do
       it "returns error" do
         post "/invitations/some-token/accept", params: valid_params, as: :json
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         json = JSON.parse(response.body)
         expect(json["errors"]).to be_present
       end

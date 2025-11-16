@@ -20,7 +20,7 @@ class ProfilesController < ApplicationController
     if current_user.update(profile_params)
       render json: { message: "Profile updated successfully", user: user_props(current_user) }
     else
-      render json: { errors: current_user.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: current_user.errors.full_messages }, status: :unprocessable_content
     end
   end
 

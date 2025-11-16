@@ -14,7 +14,7 @@ class Password::ResetController < ApplicationController
       # In production, would send email here
       render json: { message: "If that email exists, password reset instructions have been sent" }
     else
-      render json: { error: outcome.errors.full_messages.join(", ") }, status: :unprocessable_entity
+      render json: { error: outcome.errors.full_messages.join(", ") }, status: :unprocessable_content
     end
   end
 
@@ -34,7 +34,7 @@ class Password::ResetController < ApplicationController
     if outcome.valid?
       render json: { message: "Password has been reset successfully" }
     else
-      render json: { error: outcome.errors.full_messages.join(", ") }, status: :unprocessable_entity
+      render json: { error: outcome.errors.full_messages.join(", ") }, status: :unprocessable_content
     end
   end
 end

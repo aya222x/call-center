@@ -46,7 +46,7 @@ class InvitationsController < ApplicationController
         refresh_token: refresh_token_data[:token]
       }, status: :ok
     else
-      render json: { errors: outcome.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: outcome.errors.full_messages }, status: :unprocessable_content
     end
   end
 end

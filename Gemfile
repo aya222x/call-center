@@ -101,6 +101,8 @@ group :test do
   gem "shoulda-matchers", "~> 6.4"
   # For testing controller layouts and templates
   gem "rails-controller-testing"
+  # Cleans test database between runs
+  gem "database_cleaner-active_record", "~> 2.2"
 end
 
 gem "dockerfile-rails", ">= 1.7", group: :development
