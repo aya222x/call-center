@@ -44,8 +44,8 @@ Rails.application.routes.draw do
   # Dashboard (authenticated users)
   get :dashboard, to: "dashboard#index"
 
-  # Root path
-  root to: redirect("/login")
+  # Root path - smart redirect based on authentication
+  root to: "home#index"
 
   # Example Inertia route (can be removed later)
   get "inertia-example", to: "inertia_example#index"
