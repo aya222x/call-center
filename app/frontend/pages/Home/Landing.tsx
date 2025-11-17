@@ -174,7 +174,7 @@ export default function Landing() {
 
         .animate-gradient {
           background-size: 200% auto;
-          animation: gradient 3s linear infinite;
+          animation: gradient 3s linear 3 forwards;
         }
       `}</style>
     </div>
