@@ -7,7 +7,9 @@ import {
   Database,
   Code2,
   ArrowRight,
-  UserCog
+  UserCog,
+  Plug,
+  Bot
 } from 'lucide-react'
 
 export default function Landing() {
@@ -73,8 +75,8 @@ export default function Landing() {
               {[
                 { name: 'Frontend + Backend', icon: Code2 },
                 { name: 'Built-in Database', icon: Database },
-                { name: 'Authentication and Permissions', icon: Shield },
-                { name: 'Admin Panel and User Management', icon: UserCog },
+                { name: 'Integrations', icon: Plug },
+                { name: 'AI agents', icon: Bot },
               ].map((tech) => (
                 <div
                   key={tech.name}
