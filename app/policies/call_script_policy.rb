@@ -18,4 +18,10 @@ class CallScriptPolicy < ApplicationPolicy
   def destroy?
     user.admin?
   end
+
+  class Scope < ApplicationPolicy::Scope
+    def resolve
+      scope.all # All authenticated users can see all call scripts
+    end
+  end
 end
