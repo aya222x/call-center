@@ -10,16 +10,25 @@
 #  invitation_token       :string
 #  name                   :string           not null
 #  password_digest        :string
+#  password_version       :integer          default(1), not null
 #  reset_password_digest  :string
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  role                   :integer          default("operator"), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  team_id                :integer
 #
 # Indexes
 #
 #  index_users_on_email             (email) UNIQUE
 #  index_users_on_invitation_token  (invitation_token) UNIQUE
+#  index_users_on_role              (role)
+#  index_users_on_team_id           (team_id)
+#
+# Foreign Keys
+#
+#  team_id  (team_id => teams.id)
 #
 class User < ApplicationRecord
   has_secure_password validations: false
@@ -27,9 +36,14 @@ class User < ApplicationRecord
   # Audit trail for tracking changes
   audited
 
+  # Enums
+  enum :role, { operator: 0, supervisor: 1, manager: 2, admin: 3 }
+
   # Associations
   has_many :refresh_tokens, dependent: :destroy
   has_one_attached :avatar
+  belongs_to :team, optional: true
+  has_many :call_recordings, dependent: :destroy
 
   # Validations
   validates :email, presence: true,

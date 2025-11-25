@@ -28,9 +28,26 @@ FactoryBot.define do
     password { "password123" }
     password_confirmation { "password123" }
     admin { false }
+    role { :operator }
+    team { nil }
 
     trait :admin do
       admin { true }
+      role { :admin }
+    end
+
+    trait :operator do
+      role { :operator }
+      association :team
+    end
+
+    trait :supervisor do
+      role { :supervisor }
+      association :team
+    end
+
+    trait :manager do
+      role { :manager }
     end
 
     trait :invited do

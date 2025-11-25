@@ -40,6 +40,9 @@ gem "ransack"
 # Audit trail for ActiveRecord models
 gem "audited", "~> 5.6"
 
+# OpenAI API client for transcription and evaluation
+gem "ruby-openai", "~> 7.3"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 

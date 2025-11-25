@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_03_223203) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_25_053424) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -59,6 +59,64 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_223203) do
     t.index ["created_at"], name: "index_audits_on_created_at"
     t.index ["request_uuid"], name: "index_audits_on_request_uuid"
     t.index ["user_id", "user_type"], name: "user_index"
+  end
+
+  create_table "call_recordings", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "call_script_id", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "language", default: 1, null: false
+    t.date "call_date", null: false
+    t.integer "duration_seconds"
+    t.text "transcript"
+    t.string "customer_name"
+    t.string "customer_phone"
+    t.text "error_message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_date"], name: "index_call_recordings_on_call_date"
+    t.index ["call_script_id"], name: "index_call_recordings_on_call_script_id"
+    t.index ["language"], name: "index_call_recordings_on_language"
+    t.index ["status"], name: "index_call_recordings_on_status"
+    t.index ["user_id", "call_date"], name: "index_call_recordings_on_user_id_and_call_date"
+    t.index ["user_id"], name: "index_call_recordings_on_user_id"
+  end
+
+  create_table "call_scripts", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "call_type", default: 0, null: false
+    t.text "content", null: false
+    t.integer "department_id", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_call_scripts_on_active"
+    t.index ["call_type"], name: "index_call_scripts_on_call_type"
+    t.index ["department_id"], name: "index_call_scripts_on_department_id"
+  end
+
+  create_table "departments", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "deactivated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deactivated_at"], name: "index_departments_on_deactivated_at"
+    t.index ["name"], name: "index_departments_on_name", unique: true
+  end
+
+  create_table "evaluations", force: :cascade do |t|
+    t.integer "call_recording_id", null: false
+    t.decimal "overall_score", precision: 5, scale: 2, null: false
+    t.decimal "script_adherence_score", precision: 5, scale: 2
+    t.decimal "politeness_score", precision: 5, scale: 2
+    t.decimal "resolution_speed_score", precision: 5, scale: 2
+    t.decimal "terminology_score", precision: 5, scale: 2
+    t.decimal "success_score", precision: 5, scale: 2
+    t.text "recommendations"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_recording_id"], name: "index_evaluations_on_call_recording_id", unique: true
+    t.index ["overall_score"], name: "index_evaluations_on_overall_score"
   end
 
   create_table "refresh_tokens", force: :cascade do |t|
@@ -204,6 +262,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_223203) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "teams", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "department_id", null: false
+    t.integer "supervisor_id"
+    t.datetime "deactivated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deactivated_at"], name: "index_teams_on_deactivated_at"
+    t.index ["department_id", "name"], name: "index_teams_on_department_id_and_name", unique: true
+    t.index ["department_id"], name: "index_teams_on_department_id"
+    t.index ["supervisor_id"], name: "index_teams_on_supervisor_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.string "name", null: false
@@ -218,12 +289,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_223203) do
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
     t.integer "password_version", default: 1, null: false
+    t.integer "role", default: 0, null: false
+    t.integer "team_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
+    t.index ["role"], name: "index_users_on_role"
+    t.index ["team_id"], name: "index_users_on_team_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "call_recordings", "call_scripts"
+  add_foreign_key "call_recordings", "users"
+  add_foreign_key "call_scripts", "departments"
+  add_foreign_key "evaluations", "call_recordings"
   add_foreign_key "refresh_tokens", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
@@ -231,4 +310,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_223203) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "teams", "departments"
+  add_foreign_key "teams", "users", column: "supervisor_id"
+  add_foreign_key "users", "teams"
 end
