@@ -239,7 +239,7 @@ export default function Dashboard({
                             <Button
                               size="sm"
                               variant="ghost"
-                              onClick={() => router.visit(`/call-recordings/${recording.id}`)}
+                              onClick={() => router.visit(`/call_recordings/${recording.id}`)}
                             >
                               <EyeIcon className="h-4 w-4" />
                             </Button>
@@ -256,7 +256,7 @@ export default function Dashboard({
                     <Button
                       variant="outline"
                       className="w-full mt-4"
-                      onClick={() => router.visit('/call-recordings')}
+                      onClick={() => router.visit('/call_recordings')}
                     >
                       View All Recordings
                     </Button>

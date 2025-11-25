@@ -113,7 +113,7 @@ export default function CallRecordingsNew({ call_scripts, errors }: CallRecordin
 
       formDataToSend.append('call_recording[audio_file]', audioFile)
 
-      const response = await fetch('/call-recordings', {
+      const response = await fetch('/call_recordings', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -125,7 +125,7 @@ export default function CallRecordingsNew({ call_scripts, errors }: CallRecordin
       const responseData = await response.json()
 
       if (response.ok) {
-        router.visit('/call-recordings')
+        router.visit('/call_recordings')
       } else {
         setError(responseData.errors?.join(', ') || 'Upload failed')
       }
@@ -144,7 +144,7 @@ export default function CallRecordingsNew({ call_scripts, errors }: CallRecordin
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => router.visit('/call-recordings')}
+                onClick={() => router.visit('/call_recordings')}
                 className="mb-4"
               >
                 <ArrowLeftIcon className="mr-2 h-4 w-4" />
@@ -316,7 +316,7 @@ export default function CallRecordingsNew({ call_scripts, errors }: CallRecordin
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => router.visit('/call-recordings')}
+                      onClick={() => router.visit('/call_recordings')}
                       disabled={isSubmitting}
                     >
                       Cancel

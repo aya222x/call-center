@@ -74,7 +74,7 @@ export default function CallRecordingShow({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => router.visit('/call-recordings')}
+                onClick={() => router.visit('/call_recordings')}
                 className="mb-4"
               >
                 <ArrowLeftIcon className="mr-2 h-4 w-4" />

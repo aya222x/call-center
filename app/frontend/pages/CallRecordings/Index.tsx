@@ -79,7 +79,7 @@ export default function CallRecordingsIndex({
 
   const handleFilter = (key: string, value: string) => {
     router.get(
-      '/call-recordings',
+      '/call_recordings',
       {
         ...filters,
         [key]: value === 'all' ? undefined : value,
@@ -94,7 +94,7 @@ export default function CallRecordingsIndex({
 
   const handleSearch = () => {
     router.get(
-      '/call-recordings',
+      '/call_recordings',
       {
         ...filters,
         search: searchTerm || undefined,
@@ -149,7 +149,7 @@ export default function CallRecordingsIndex({
                 </p>
               </div>
               {can_create && (
-                <Button onClick={() => router.visit('/call-recordings/new')}>
+                <Button onClick={() => router.visit('/call_recordings/new')}>
                   <PlusIcon className="mr-2 h-4 w-4" />
                   Upload Recording
                 </Button>
@@ -276,7 +276,7 @@ export default function CallRecordingsIndex({
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => router.visit(`/call-recordings/${recording.id}`)}
+                                onClick={() => router.visit(`/call_recordings/${recording.id}`)}
                               >
                                 <EyeIcon className="h-4 w-4" />
                               </Button>
@@ -298,7 +298,7 @@ export default function CallRecordingsIndex({
                     <Button
                       variant="outline"
                       onClick={() =>
-                        router.get('/call-recordings', { ...filters, page: pagination.page - 1 })
+                        router.get('/call_recordings', { ...filters, page: pagination.page - 1 })
                       }
                     >
                       Previous
@@ -311,7 +311,7 @@ export default function CallRecordingsIndex({
                     <Button
                       variant="outline"
                       onClick={() =>
-                        router.get('/call-recordings', { ...filters, page: pagination.page + 1 })
+                        router.get('/call_recordings', { ...filters, page: pagination.page + 1 })
                       }
                     >
                       Next

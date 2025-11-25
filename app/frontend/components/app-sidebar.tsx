@@ -42,15 +42,15 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
     },
     {
       title: "Call Recordings",
-      url: "/call-recordings",
+      url: "/call_recordings",
       icon: PhoneIcon,
-      activePattern: "/call-recordings",
+      activePattern: "/call_recordings",
     },
     {
       title: "Call Scripts",
-      url: "/call-scripts",
+      url: "/call_scripts",
       icon: FileTextIcon,
-      activePattern: "/call-scripts",
+      activePattern: "/call_scripts",
     },
   ]
 
