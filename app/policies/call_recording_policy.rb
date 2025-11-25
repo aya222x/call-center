@@ -34,4 +34,18 @@ class CallRecordingPolicy < ApplicationPolicy
 
     user.team_id == record.user.team_id
   end
+
+  class Scope < ApplicationPolicy::Scope
+    def resolve
+      if user.admin? || user.manager?
+        scope.all
+      elsif user.supervisor?
+        scope.for_team(user.team_id)
+      elsif user.operator?
+        scope.for_user(user.id)
+      else
+        scope.none
+      end
+    end
+  end
 end
