@@ -90,7 +90,7 @@ export default function CallRecordingsNew({ call_scripts, errors }: CallRecordin
     }
   }
 
-  const onSubmit = async (data: CallRecordingFormData) => {
+  const onSubmit = (data: CallRecordingFormData) => {
     if (!audioFile) {
       setError('Please select an audio file')
       return
@@ -98,40 +98,20 @@ export default function CallRecordingsNew({ call_scripts, errors }: CallRecordin
 
     setError('')
 
-    try {
-      const formDataToSend = new FormData()
-      formDataToSend.append('call_recording[call_script_id]', data.call_script_id)
-      formDataToSend.append('call_recording[language]', data.language)
-      formDataToSend.append('call_recording[call_date]', format(callDate, 'yyyy-MM-dd'))
-
-      if (data.customer_name) {
-        formDataToSend.append('call_recording[customer_name]', data.customer_name)
-      }
-      if (data.customer_phone) {
-        formDataToSend.append('call_recording[customer_phone]', data.customer_phone)
-      }
-
-      formDataToSend.append('call_recording[audio_file]', audioFile)
-
-      const response = await fetch('/call_recordings', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-        },
-        body: formDataToSend,
-      })
-
-      const responseData = await response.json()
-
-      if (response.ok) {
-        router.visit('/call_recordings')
-      } else {
-        setError(responseData.errors?.join(', ') || 'Upload failed')
-      }
-    } catch (err) {
-      setError('An error occurred while uploading')
-    }
+    router.post('/call_recordings', {
+      call_recording: {
+        call_script_id: data.call_script_id,
+        language: data.language,
+        call_date: format(callDate, 'yyyy-MM-dd'),
+        customer_name: data.customer_name || null,
+        customer_phone: data.customer_phone || null,
+        audio_file: audioFile,
+      },
+    }, {
+      onError: (errors) => {
+        setError(Object.values(errors).flat().join(', ') || 'Upload failed')
+      },
+    })
   }
 
   return (
