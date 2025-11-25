@@ -2,6 +2,8 @@ import * as React from "react"
 import {
   LayoutDashboardIcon,
   AppWindowIcon,
+  PhoneIcon,
+  FileTextIcon,
 } from "lucide-react"
 import { Link } from "@inertiajs/react"
 
@@ -38,6 +40,18 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       url: "/dashboard",
       icon: LayoutDashboardIcon,
     },
+    {
+      title: "Call Recordings",
+      url: "/call-recordings",
+      icon: PhoneIcon,
+      activePattern: "/call-recordings",
+    },
+    {
+      title: "Call Scripts",
+      url: "/call-scripts",
+      icon: FileTextIcon,
+      activePattern: "/call-scripts",
+    },
   ]
 
   return (
@@ -51,7 +65,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
                   <AppWindowIcon className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">My App</span>
+                  <span className="truncate font-semibold">Call Center KPI</span>
                 </div>
               </Link>
             </SidebarMenuButton>

@@ -63,11 +63,30 @@ An AI-powered application for evaluating call center operator performance throug
 - **Color Coding**: Green (80+), Yellow (60-79), Orange (40-59), Red (<40)
 
 ### 6. Analytics & Reporting
-- **Dashboard**: Overview statistics with key metrics
-- **Performance Trends**: Graphs showing score changes over time
-- **Comparative Analysis**: Team and individual comparisons
-- **Export Options**: PDF and Excel report generation
-- **Time Periods**: Daily, weekly, monthly aggregations
+
+**Dashboard**
+
+- Overview statistics showing total recordings, completed/pending/failed counts
+- Average KPI scores across all evaluations with visual progress bars
+- Recent recordings list with quick access to details
+- Top performers leaderboard (visible to admins and managers only)
+- Language breakdown showing distribution of recordings by language
+
+**Call Recordings Management**
+
+- List view with filtering by status, language, and search by customer info
+- Pagination support for large datasets
+- Detailed recording view with audio playback
+- Full transcript display with AI evaluation results
+- Upload interface for new recordings with validation
+- Color-coded score badges for quick performance assessment
+
+**Performance Metrics**
+
+- Performance trends showing score changes over time
+- Comparative analysis between teams and individuals
+- Export options for PDF and Excel report generation (planned)
+- Time period aggregations for daily, weekly, monthly views (planned)
 
 ---
 
@@ -228,22 +247,56 @@ An AI-powered application for evaluating call center operator performance throug
 ## Development Status
 
 ### ✅ Completed (Production Ready - Level 3)
+
+**Backend**
+
 - Database schema with 6 tables and proper indexes
 - 5 ActiveRecord models with validations and associations
-- 3 Pundit policies for role-based authorization
+- 3 Pundit policies for role-based authorization (Department, CallScript, CallRecording)
+- 1 Dashboard policy for statistics access
 - 2 OpenAI service objects (transcription + evaluation)
 - User authentication with JWT tokens
 - Audit trail for all model changes
 - **Test Coverage**: 175 specs (88 models + 51 policies + 36 services) - ALL GREEN ✅
 
-### 🚧 In Progress
-- Controllers with request specs (departments, call_scripts, call_recordings, dashboard)
-- React UI pages with Vitest tests
-- Playwright E2E tests for user workflows
+**Controllers**
+
+- DashboardController with comprehensive statistics
+- CallRecordingsController (index, show, new, create)
+- Policy-scoped data access based on user roles
+- Pagination and filtering support
+
+**Frontend UI**
+
+- Dashboard page with KPI overview, stats cards, recent recordings, and top performers
+- Call Recordings Index page with filtering, search, and pagination
+- Call Recordings Show page with audio player, transcript, and evaluation display
+- Call Recordings New page with file upload, form validation, and Calendar date picker
+- Navigation sidebar with Dashboard, Call Recordings, and Call Scripts menu items
+- Responsive layout using shadcn/ui components throughout
+- Color-coded score badges (green/yellow/orange/red)
 
 ### 📋 Planned
-- Final health check and integration testing
-- Documentation and deployment guide
+
+**Testing**
+
+- Request specs for controllers
+- Vitest tests for React UI pages
+- Playwright E2E tests for user workflows
+
+**Call Scripts Management** (UI pending)
+
+- Call Scripts Index page with list view
+- Call Scripts Show page with details
+- Call Scripts New/Edit pages for admins only
+- Integration with call recordings
+
+**Additional Features**
+
+- Background job processing for transcription/evaluation
+- Email notifications for completed evaluations
+- PDF/Excel report export functionality
+- Advanced filtering and search capabilities
 
 ---
 
