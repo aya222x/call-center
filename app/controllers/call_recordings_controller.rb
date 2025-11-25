@@ -98,7 +98,9 @@ class CallRecordingsController < ApplicationController
     @recording.status = :uploaded
 
     if @recording.save
-      # TODO: Trigger background job for transcription
+      # Trigger background job for transcription and evaluation
+      ProcessCallRecordingJob.perform_later(@recording.id)
+
       redirect_to call_recording_path(@recording),
                   notice: 'Call recording uploaded successfully. Processing will begin shortly.'
     else
