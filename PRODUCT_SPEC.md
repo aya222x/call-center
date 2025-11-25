@@ -109,7 +109,8 @@ An AI-powered application for evaluating call center operator performance throug
 - **Provider**: OpenAI API (GPT-4 for evaluation, Whisper for transcription)
 - **Transcription**: Whisper-1 model with language detection
 - **Evaluation**: GPT-4 with custom prompts for structured JSON responses
-- **Error Handling**: Automatic retry logic and detailed error messages
+- **Background Processing**: ProcessCallRecordingJob handles async transcription and evaluation
+- **Error Handling**: Automatic status tracking and detailed error messages
 
 ### Testing Strategy (Level 3 - Production Ready)
 - **Backend**: RSpec for models, services, policies, controllers
@@ -122,13 +123,16 @@ An AI-powered application for evaluating call center operator performance throug
 ## Key Workflows
 
 ### Call Upload & Evaluation Flow
-1. Operator uploads audio file with metadata
+1. Operator uploads audio file with metadata through web interface
 2. System validates file and creates recording (status: uploaded)
-3. Background job triggers OpenAI Whisper transcription (status: transcribing)
-4. Transcript saved, AI evaluation begins (status: analyzing)
-5. GPT-4 analyzes transcript against script, scores 5 KPIs
-6. Evaluation created with scores and recommendations (status: completed)
-7. Operator receives notification of results
+3. Background job (ProcessCallRecordingJob) automatically queues for processing
+4. Job updates status to transcribing and sends audio to OpenAI Whisper API
+5. Transcript saved to database, status changes to analyzing
+6. Job sends transcript to GPT-4 for evaluation against call script
+7. GPT-4 analyzes and scores 5 KPIs with personalized recommendations
+8. Evaluation created and linked to recording (status: completed)
+9. Operator can view results immediately on recording detail page
+10. Failed recordings show status: failed with detailed error message
 
 ### Performance Review Flow
 1. Supervisor/Manager accesses dashboard
@@ -267,6 +271,13 @@ An AI-powered application for evaluating call center operator performance throug
 - Policy-scoped data access based on user roles
 - Pagination and filtering support
 
+**Background Jobs**
+
+- ProcessCallRecordingJob for automatic transcription and evaluation
+- Queues after upload, processes asynchronously
+- Updates recording status throughout pipeline
+- Captures and stores error messages for troubleshooting
+
 **Frontend UI**
 
 - Dashboard page with KPI overview, stats cards, recent recordings, and top performers
@@ -277,6 +288,7 @@ An AI-powered application for evaluating call center operator performance throug
 - Navigation sidebar with Dashboard, Call Recordings, and Call Scripts menu items
 - Responsive layout using shadcn/ui components throughout
 - Color-coded score badges (green/yellow/orange/red)
+- Real-time status tracking (uploaded → transcribing → analyzing → completed/failed)
 
 ### 📋 Planned
 
