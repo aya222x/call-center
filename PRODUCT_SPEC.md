@@ -79,6 +79,7 @@ An AI-powered application for evaluating call center operator performance throug
 - Detailed recording view with audio playback
 - Full transcript display with AI evaluation results
 - Upload interface for new recordings with validation
+- Delete recordings with confirmation dialog (managers and admins only)
 - Color-coded score badges for quick performance assessment
 
 **Performance Metrics**
@@ -266,7 +267,7 @@ An AI-powered application for evaluating call center operator performance throug
 **Controllers**
 
 - DashboardController with comprehensive statistics
-- CallRecordingsController (index, show, new, create)
+- CallRecordingsController (index, show, new, create, destroy)
 - CallScriptsController (index, show, new, create, edit, update)
 - Policy-scoped data access based on user roles
 - Pagination and filtering support
@@ -282,13 +283,14 @@ An AI-powered application for evaluating call center operator performance throug
 
 - Dashboard page with KPI overview, stats cards, recent recordings, and top performers
 - Call Recordings Index page with filtering, search, and pagination
-- Call Recordings Show page with audio player, transcript, and evaluation display
+- Call Recordings Show page with audio player, transcript, evaluation display, and delete button
 - Call Recordings New page with file upload, form validation, and Calendar date picker
 - Call Scripts Index page with filtering by department, call type, and status
 - Navigation sidebar with Dashboard, Call Recordings, and Call Scripts menu items
 - Responsive layout using shadcn/ui components throughout
 - Color-coded score badges (green/yellow/orange/red)
 - Real-time status tracking (uploaded → transcribing → analyzing → completed/failed)
+- Confirmation dialogs for destructive actions (delete recordings)
 
 ### 📋 Planned
 
@@ -302,11 +304,9 @@ An AI-powered application for evaluating call center operator performance throug
 
 - Call Scripts Show page with full script content
 - Call Scripts New/Edit pages for admins only
-- Delete functionality with confirmation dialog
 
 **Additional Features**
 
-- Background job processing for transcription/evaluation
 - Email notifications for completed evaluations
 - PDF/Excel report export functionality
 - Advanced filtering and search capabilities
