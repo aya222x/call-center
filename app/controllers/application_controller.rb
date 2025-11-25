@@ -31,6 +31,11 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # Pundit uses this method to determine the current user
+  def pundit_user
+    current_user
+  end
+
   def pagination_props(pagy)
     {
       page: pagy.page,
