@@ -3,11 +3,8 @@ module Openai
     object :call_recording, class: CallRecording
 
     validate :validate_audio_file
-    validate :validate_recording_status
 
     def execute
-      call_recording.update!(status: :transcribing)
-
       transcript = transcribe_audio
       call_recording.update!(transcript: transcript)
 
@@ -61,10 +58,5 @@ module Openai
       end
     end
 
-    def validate_recording_status
-      unless call_recording.can_be_processed?
-        errors.add(:base, 'Recording cannot be processed')
-      end
-    end
   end
 end
