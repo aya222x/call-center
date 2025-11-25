@@ -1,4 +1,5 @@
 class CallScriptsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_call_script, only: [:show, :edit, :update]
 
   after_action :verify_authorized

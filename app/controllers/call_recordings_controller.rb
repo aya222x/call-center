@@ -1,4 +1,5 @@
 class CallRecordingsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_call_recording, only: [:show]
 
   after_action :verify_authorized
