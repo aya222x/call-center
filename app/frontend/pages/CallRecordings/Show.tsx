@@ -1,10 +1,12 @@
 import { router } from '@inertiajs/react'
-import { ArrowLeftIcon, PlayCircleIcon } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowLeftIcon, PlayCircleIcon, TrashIcon } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
+import { DeleteConfirmationDialog } from '@/components/delete-confirmation-dialog'
 
 interface Recording {
   id: number
@@ -47,6 +49,12 @@ export default function CallRecordingShow({
   can_update,
   can_delete,
 }: CallRecordingShowProps) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+
+  const handleDelete = () => {
+    router.delete(`/call_recordings/${recording.id}`)
+  }
+
   const getScoreColor = (color: string) => {
     const colors: Record<string, string> = {
       green: 'text-green-600',
@@ -80,7 +88,19 @@ export default function CallRecordingShow({
                 <ArrowLeftIcon className="mr-2 h-4 w-4" />
                 Back to Recordings
               </Button>
-              <h1 className="text-2xl font-bold">Call Recording #{recording.id}</h1>
+              <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-bold">Call Recording #{recording.id}</h1>
+                {can_delete && (
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => setShowDeleteDialog(true)}
+                  >
+                    <TrashIcon className="mr-2 h-4 w-4" />
+                    Delete Recording
+                  </Button>
+                )}
+              </div>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -278,6 +298,14 @@ export default function CallRecordingShow({
           </div>
         </div>
       </div>
+
+      <DeleteConfirmationDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        onConfirm={handleDelete}
+        title="Delete Call Recording"
+        description="Are you sure you want to delete this call recording? This action cannot be undone. All associated data including the transcript and evaluation will be permanently deleted."
+      />
     </div>
   )
 }

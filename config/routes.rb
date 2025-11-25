@@ -45,7 +45,7 @@ Rails.application.routes.draw do
   get :dashboard, to: "dashboard#index"
 
   # Call Center routes
-  resources :call_recordings, only: [:index, :show, :new, :create]
+  resources :call_recordings, only: [:index, :show, :new, :create, :destroy]
   resources :call_scripts, only: [:index, :show, :new, :create, :edit, :update]
 
   # Root path - smart redirect based on authentication

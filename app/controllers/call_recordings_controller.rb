@@ -1,6 +1,6 @@
 class CallRecordingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_call_recording, only: [:show]
+  before_action :set_call_recording, only: [:show, :destroy]
 
   after_action :verify_authorized
   after_action :verify_policy_scoped, only: :index
@@ -107,6 +107,15 @@ class CallRecordingsController < ApplicationController
       redirect_to new_call_recording_path,
                   inertia: { errors: @recording.errors.to_hash }
     end
+  end
+
+  def destroy
+    authorize @recording
+
+    @recording.destroy!
+
+    redirect_to call_recordings_path,
+                notice: 'Call recording deleted successfully.'
   end
 
   private
