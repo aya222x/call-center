@@ -263,6 +263,7 @@ An AI-powered application for evaluating call center operator performance throug
 
 - DashboardController with comprehensive statistics
 - CallRecordingsController (index, show, new, create)
+- CallScriptsController (index, show, new, create, edit, update)
 - Policy-scoped data access based on user roles
 - Pagination and filtering support
 
@@ -272,6 +273,7 @@ An AI-powered application for evaluating call center operator performance throug
 - Call Recordings Index page with filtering, search, and pagination
 - Call Recordings Show page with audio player, transcript, and evaluation display
 - Call Recordings New page with file upload, form validation, and Calendar date picker
+- Call Scripts Index page with filtering by department, call type, and status
 - Navigation sidebar with Dashboard, Call Recordings, and Call Scripts menu items
 - Responsive layout using shadcn/ui components throughout
 - Color-coded score badges (green/yellow/orange/red)
@@ -284,12 +286,11 @@ An AI-powered application for evaluating call center operator performance throug
 - Vitest tests for React UI pages
 - Playwright E2E tests for user workflows
 
-**Call Scripts Management** (UI pending)
+**Call Scripts Management** (remaining UI pages)
 
-- Call Scripts Index page with list view
-- Call Scripts Show page with details
+- Call Scripts Show page with full script content
 - Call Scripts New/Edit pages for admins only
-- Integration with call recordings
+- Delete functionality with confirmation dialog
 
 **Additional Features**
 
