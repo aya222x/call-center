@@ -77,7 +77,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # Writing and running tests
-  gem "rspec-rails", "~> 7.1"
+  gem "rspec-rails", "~> 8.0"
   # Replaces standard Rails fixtures
   gem "factory_bot_rails", "~> 6.4"
   # Generates realistic test data
