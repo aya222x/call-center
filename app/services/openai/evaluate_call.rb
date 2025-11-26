@@ -1,5 +1,7 @@
 module Openai
   class EvaluateCall < ActiveInteraction::Base
+    include RetryHandler
+
     object :call_recording, class: CallRecording
 
     validate :validate_transcript
@@ -28,19 +30,21 @@ module Openai
     def evaluate_with_ai
       client = OpenAI::Client.new(access_token: ENV.fetch('OPENAI_API_KEY', 'test_key'))
 
-      response = client.chat(
-        parameters: {
-          model: 'gpt-4',
-          messages: [
-            { role: 'system', content: system_prompt },
-            { role: 'user', content: user_prompt }
-          ],
-          temperature: 0.3
-        }
-      )
+      with_retry do
+        response = client.chat(
+          parameters: {
+            model: 'gpt-4',
+            messages: [
+              { role: 'system', content: system_prompt },
+              { role: 'user', content: user_prompt }
+            ],
+            temperature: 0.3
+          }
+        )
 
-      content = response.dig('choices', 0, 'message', 'content')
-      parse_evaluation_response(content)
+        content = response.dig('choices', 0, 'message', 'content')
+        parse_evaluation_response(content)
+      end
     rescue JSON::ParserError => e
       raise StandardError, "Failed to parse evaluation response: #{e.message}"
     end

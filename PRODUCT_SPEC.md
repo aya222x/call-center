@@ -111,6 +111,7 @@ An AI-powered application for evaluating call center operator performance throug
 - **Transcription**: Whisper-1 model with language detection
 - **Evaluation**: GPT-4 with custom prompts for structured JSON responses
 - **Background Processing**: ProcessCallRecordingJob handles async transcription and evaluation
+- **Retry Logic**: Automatic retry with exponential backoff for rate limit errors (up to 5 attempts)
 - **Error Handling**: Automatic status tracking and detailed error messages
 
 ### Testing Strategy (Level 3 - Production Ready)

@@ -1,5 +1,7 @@
 module Openai
   class TranscribeAudio < ActiveInteraction::Base
+    include RetryHandler
+
     object :call_recording, class: CallRecording
 
     validate :validate_audio_file
@@ -23,15 +25,17 @@ module Openai
     def transcribe_audio
       client = OpenAI::Client.new(access_token: ENV.fetch('OPENAI_API_KEY', 'test_key'))
 
-      response = client.audio.transcribe(
-        parameters: {
-          model: 'whisper-1',
-          file: audio_file_io,
-          language: language_code
-        }
-      )
+      with_retry do
+        response = client.audio.transcribe(
+          parameters: {
+            model: 'whisper-1',
+            file: audio_file_io,
+            language: language_code
+          }
+        )
 
-      response['text']
+        response['text']
+      end
     end
 
     def audio_file_io
