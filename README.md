@@ -278,3 +278,66 @@ CORS is configured in `config/initializers/cors.rb`:
 - [shadcn/ui Components](https://ui.shadcn.com)
 - [Rails Guides](https://guides.rubyonrails.org)
 - [Tailwind CSS](https://tailwindcss.com)
+
+## 🎭 Demo Mode
+
+The system includes a **Demo Mode** for presentations and testing without using OpenAI API credits.
+
+### Enabling Demo Mode
+
+Add to your `.env` file:
+
+```bash
+USE_DEMO_MODE=true
+```
+
+### What Demo Mode Does
+
+When enabled, the system will:
+
+✅ **Generate Realistic Transcripts**
+- Creates demo transcripts in 3 languages (Kyrgyz, Russian, English)
+- Simulates natural call center conversations
+- Includes random variations for each recording
+
+✅ **Generate Realistic Evaluations**
+- Creates scores between 70-95 for each KPI metric
+- Provides context-appropriate recommendations in multiple languages
+- Simulates processing delays (1-4 seconds) for realism
+
+✅ **No OpenAI API Calls**
+- Zero cost for demonstrations
+- No rate limits
+- Instant results (with simulated delays)
+
+### Use Cases
+
+- **Client Demonstrations**: Show full system functionality without API costs
+- **UI/UX Testing**: Test interface with various score ranges
+- **Training**: Familiarize team with the system before production
+- **Development**: Work on features without API dependencies
+
+### Disabling Demo Mode
+
+To use real OpenAI API:
+
+```bash
+# In .env file, change to:
+USE_DEMO_MODE=false
+
+# Or remove the line entirely
+```
+
+Then ensure your `OPENAI_API_KEY` is set correctly.
+
+### Demo Mode vs Production
+
+| Feature | Demo Mode | Production (OpenAI) |
+|---------|-----------|---------------------|
+| Cost | Free | ~$0.03 per call |
+| Processing Time | 3-7 seconds | 10-30 seconds |
+| Transcript Quality | Pre-written templates | Actual audio transcription |
+| Evaluation Accuracy | Random (70-95) | AI-powered analysis |
+| Languages | All 3 supported | All 3 supported |
+| Recommendations | Template-based | Context-aware |
+

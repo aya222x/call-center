@@ -4,24 +4,33 @@ class ProcessCallRecordingJob < ApplicationJob
   def perform(call_recording_id)
     recording = CallRecording.find(call_recording_id)
 
+    # Check if demo mode is enabled
+    use_demo_mode = ENV['USE_DEMO_MODE'] == 'true'
+
     # Step 1: Transcribe audio
     recording.update!(status: :transcribing)
 
-    transcription_outcome = Openai::TranscribeAudio.run(
-      call_recording: recording
-    )
+    transcription_outcome = if use_demo_mode
+      Openai::DemoTranscribe.run(call_recording: recording)
+    else
+      Openai::TranscribeAudio.run(call_recording: recording)
+    end
 
     if transcription_outcome.valid?
       recording.update!(
-        transcript: transcription_outcome.result,
+        transcript: transcription_outcome.result[:transcript],
         status: :analyzing
       )
 
       # Step 2: Evaluate call
-      evaluation_outcome = Openai::EvaluateCall.run(
-        call_recording: recording,
-        call_script: recording.call_script
-      )
+      evaluation_outcome = if use_demo_mode
+        Openai::DemoEvaluate.run(call_recording: recording)
+      else
+        Openai::EvaluateCall.run(
+          call_recording: recording,
+          call_script: recording.call_script
+        )
+      end
 
       if evaluation_outcome.valid?
         recording.update!(status: :completed)
