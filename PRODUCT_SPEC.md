@@ -61,6 +61,7 @@ An AI-powered application for evaluating call center operator performance throug
 - **AI Recommendations**: Personalized improvement suggestions
 - **Score Labels**: Excellent (90+), Good (80-89), Satisfactory (70-79), Needs Improvement (60-69), Poor (<60)
 - **Color Coding**: Green (80+), Yellow (60-79), Orange (40-59), Red (<40)
+- **Demo Mode**: Optional simulation mode for demonstrations without API costs (realistic transcripts and scores)
 
 ### 6. Analytics & Reporting
 
@@ -113,6 +114,7 @@ An AI-powered application for evaluating call center operator performance throug
 - **Background Processing**: ProcessCallRecordingJob handles async transcription and evaluation
 - **Retry Logic**: Automatic retry with exponential backoff for rate limit errors (up to 5 attempts)
 - **Error Handling**: Automatic status tracking and detailed error messages
+- **Demo Mode**: Optional mode for presentations and testing without OpenAI API costs (generates realistic transcripts and scores)
 
 ### Testing Strategy (Level 3 - Production Ready)
 - **Backend**: RSpec for models, services, policies, controllers
