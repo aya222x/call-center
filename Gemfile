@@ -101,7 +101,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   # One-liners to test common Rails functionality
-  gem "shoulda-matchers", "~> 6.4"
+  gem "shoulda-matchers", "~> 7.0"
   # For testing controller layouts and templates
   gem "rails-controller-testing"
   # Cleans test database between runs
