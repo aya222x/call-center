@@ -193,7 +193,7 @@ GEM
       activesupport (>= 7.0.0)
     jmespath (1.6.2)
     json (2.15.1)
-    jwt (2.10.2)
+    jwt (3.1.2)
       base64
     kamal (2.7.0)
       activesupport (>= 7.0)
@@ -543,7 +543,7 @@ DEPENDENCIES
   faker (~> 3.5)
   inertia_rails (~> 3.10)
   jbuilder
-  jwt (~> 2.7)
+  jwt (~> 3.1)
   kamal
   letter_opener_web (~> 3.0)
   litestream (~> 0.14.0)

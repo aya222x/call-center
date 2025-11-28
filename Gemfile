@@ -20,7 +20,7 @@ gem "inertia_rails", "~> 3.10"
 gem "bcrypt", "~> 3.1.20"
 
 # JWT for token-based authentication
-gem "jwt", "~> 2.7"
+gem "jwt", "~> 3.1"
 
 # CORS for cross-origin requests
 gem "rack-cors", "~> 2.0"
