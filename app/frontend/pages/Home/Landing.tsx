@@ -9,7 +9,13 @@ import {
   ArrowRight,
   UserCog,
   Plug,
-  Bot
+  Bot,
+  PhoneCall,
+  BarChart3,
+  Mic,
+  Star,
+  TrendingUp,
+  Users
 } from 'lucide-react'
 
 export default function Landing() {
@@ -20,9 +26,9 @@ export default function Landing() {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent">
-              <Sparkles className="size-5 text-primary-foreground" />
+              <PhoneCall className="size-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold">My App</span>
+            <span className="text-xl font-bold">Call Center KPI</span>
           </div>
           <Link href="/login">
             <Button variant="outline">Log In</Button>
@@ -35,22 +41,22 @@ export default function Landing() {
         <div className="flex flex-col items-center text-center">
           {/* Animated Badge */}
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border bg-card px-4 py-2 text-sm animate-fade-in">
-            <Zap className="size-4 text-primary" />
-            <span className="text-muted-foreground">Build production-ready apps in minutes</span>
+            <Bot className="size-4 text-primary" />
+            <span className="text-muted-foreground">AI-powered call quality evaluation</span>
           </div>
 
           {/* Main Headline */}
           <h1 className="mb-6 max-w-4xl text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
-            Build Full-Stack Apps{' '}
+            Transform Call Center Quality with{' '}
             <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient">
-              Faster
+              AI
             </span>
           </h1>
 
           {/* Subheadline */}
           <p className="mb-8 max-w-2xl text-lg text-muted-foreground md:text-xl">
-            Start with authentication, admin dashboard, and modern UI components.
-            Add features using AI-powered development and ship your application in record time.
+            Automatically transcribe and evaluate call recordings in multiple languages.
+            Get instant KPI scores, AI-powered recommendations, and actionable insights to improve your team's performance.
           </p>
 
           {/* CTA Buttons */}
@@ -69,14 +75,14 @@ export default function Landing() {
           {/* Tech Stack */}
           <div className="mt-16 w-full max-w-4xl">
             <p className="mb-6 text-sm font-medium text-muted-foreground uppercase tracking-wide">
-              Built with modern technology
+              Powered by cutting-edge AI
             </p>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               {[
-                { name: 'Frontend + Backend', icon: Code2 },
-                { name: 'Built-in Database', icon: Database },
-                { name: 'Integrations', icon: Plug },
-                { name: 'AI agents', icon: Bot },
+                { name: '3 Languages', icon: Mic },
+                { name: '5 KPI Metrics', icon: BarChart3 },
+                { name: 'Auto Transcription', icon: Zap },
+                { name: 'AI Evaluation', icon: Bot },
               ].map((tech) => (
                 <div
                   key={tech.name}
@@ -91,27 +97,42 @@ export default function Landing() {
 
           {/* Features Section */}
           <div className="mt-24 w-full max-w-6xl">
-            <h2 className="mb-4 text-3xl font-bold">Everything you need to build faster</h2>
+            <h2 className="mb-4 text-3xl font-bold">Comprehensive Quality Evaluation</h2>
             <p className="mb-12 text-lg text-muted-foreground">
-              A complete starter template with all the essentials
+              Everything you need to improve call center performance
             </p>
 
             <div className="grid gap-8 md:grid-cols-3">
               {[
                 {
+                  icon: Mic,
+                  title: 'Multi-Language Support',
+                  description: 'Automatic transcription in Kyrgyz, Russian, and English using OpenAI Whisper.',
+                },
+                {
+                  icon: Star,
+                  title: '5 Key Performance Indicators',
+                  description: 'Script adherence, politeness, resolution speed, terminology usage, and call success.',
+                },
+                {
+                  icon: TrendingUp,
+                  title: 'AI-Powered Insights',
+                  description: 'GPT-4 analyzes each call and provides personalized recommendations for improvement.',
+                },
+                {
+                  icon: Users,
+                  title: 'Role-Based Access',
+                  description: '4 user roles: Operators, Supervisors, Managers, and Admins with tailored permissions.',
+                },
+                {
+                  icon: BarChart3,
+                  title: 'Real-Time Analytics',
+                  description: 'Dashboard with KPI trends, top performers, and team performance metrics.',
+                },
+                {
                   icon: Shield,
-                  title: 'Authentication Ready',
-                  description: 'JWT-based auth with login, password reset, and user invitations built-in.',
-                },
-                {
-                  icon: UserCog,
-                  title: 'Admin Dashboard',
-                  description: 'Complete admin panel with user management, audit logs, and permissions.',
-                },
-                {
-                  icon: Sparkles,
-                  title: 'Modern UI Components',
-                  description: 'shadcn/ui components with Tailwind CSS v4 and dark mode support.',
+                  title: 'Secure & Audited',
+                  description: 'JWT authentication, encrypted data, and complete audit trail for all changes.',
                 },
               ].map((feature) => (
                 <div
@@ -130,13 +151,13 @@ export default function Landing() {
 
           {/* Final CTA */}
           <div className="mt-24 w-full max-w-4xl rounded-2xl border bg-gradient-to-br from-primary/10 via-background to-accent/10 p-12">
-            <h2 className="mb-4 text-3xl font-bold">Ready to build something amazing?</h2>
+            <h2 className="mb-4 text-3xl font-bold">Ready to transform your call center?</h2>
             <p className="mb-8 text-lg text-muted-foreground">
-              Start with a solid foundation and add features as you need them.
+              Start evaluating calls with AI today. Upload recordings, get instant transcriptions, and receive actionable insights in minutes.
             </p>
             <Link href="/login">
               <Button size="lg" className="bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/50 transition-all">
-                Get Started Now
+                Start Free Trial
               </Button>
             </Link>
           </div>
@@ -147,7 +168,10 @@ export default function Landing() {
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <p>
-            Built using{' '}
+            © 2025 Call Center KPI. AI-powered quality evaluation for modern call centers.
+          </p>
+          <p className="mt-2">
+            Built with{' '}
             <a
               href="https://cayu.ai"
               target="_blank"
